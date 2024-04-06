@@ -1,0 +1,35 @@
+import random
+HEIGH = 16
+WIDHT = 16
+MINES = 40
+
+
+def mines_position():
+    mines_place = []
+    for i in range(MINES):
+        while True:
+            x = random.randint(0,(WIDHT-1))
+            y =random.randint(0,(HEIGH-1))
+            mines_place.append([x,y])
+            if i == mines_place.index([x,y]):
+                break
+            else:
+                mines_place.pop(i)
+    return mines_place
+
+
+def game_matriz():
+    mines_place = mines_position()
+    matriz = []
+    for i in range(WIDHT):
+        matriz.append([0]*HEIGH)
+    for val in mines_place:
+        x = val[0]
+        y = val[1]
+        matriz[x][y] = 1 
+    return matriz
+        
+      
+matriz = game_matriz()
+for i in range(HEIGH):
+    print(matriz[i])
