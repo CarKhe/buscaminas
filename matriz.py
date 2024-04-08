@@ -74,5 +74,20 @@ matriz_game = check_matriz(matriz)
 for i in range(HEIGH):
     print(matriz_game[i])
 
-print(matriz_game[2][0])
+# for x in range(HEIGH):
+#     for y in range(WIDHT):
+#         Celda(matriz_game[x][y]).click()
+
+
+
+for i in range(3):
+    x = random.randint(0,(WIDHT-1))
+    y =random.randint(0,(HEIGH-1))
+    print(f"[{x},{y}]")
+    if Celda(matriz_game[x][y]).click() == False:
+        print("Game Over")
+        break
+    print("Ganaste")      
+      
+        
 
