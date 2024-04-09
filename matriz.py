@@ -1,7 +1,7 @@
 import random
 from celda import Celda
 HEIGH = 3
-WIDHT = 3  
+WIDHT = 3 
 MINES = 3
 
 
@@ -19,15 +19,20 @@ def mines_position():
     return mines_place
 
 
-def game_matriz():
-    mines_place = mines_position()
+def game_matriz(view = False):
     matriz = []
     for i in range(WIDHT):
         matriz.append([0]*HEIGH)
-    for val in mines_place:
-        x = val[0]
-        y = val[1]
-        matriz[x][y] = 9 
+    if view:
+        for x in range(WIDHT):
+            for y in range(HEIGH):
+                matriz[x][y] = "?"   
+    else:
+        mines_place = mines_position()
+        for val in mines_place:
+            x = val[0]
+            y = val[1]
+            matriz[x][y] = 9
     return matriz
 
 def around(x,y):
@@ -66,13 +71,24 @@ def check_matriz(matriz):
             matriz = bombs_around(matriz,x,y) 
     return matriz
 
+def game_over():
+    print("Se terminó el juego")
 
-        
-matriz = game_matriz()
 
-matriz_game = check_matriz(matriz)
-for i in range(HEIGH):
-    print(matriz_game[i])
+view_matriz = game_matriz(True)       
+only_bombs_matriz = game_matriz()
+matriz_game = check_matriz(only_bombs_matriz)
+
+while True:
+    for i in range(HEIGH):
+        print(view_matriz[i])
+    x = input("Selecciona el Valor de X: ")
+    y = input("Selecciona el valor de Y: ")
+    if Celda(matriz_game[int(x)][int(y)]).click():
+        view_matriz[int(x)][int(y)] = f"{matriz_game[int(x)][int(y)]}"
+    else:
+        game_over()
+        break
 
 # for x in range(HEIGH):
 #     for y in range(WIDHT):
@@ -80,14 +96,17 @@ for i in range(HEIGH):
 
 
 
-for i in range(3):
-    x = random.randint(0,(WIDHT-1))
-    y =random.randint(0,(HEIGH-1))
-    print(f"[{x},{y}]")
-    if Celda(matriz_game[x][y]).click() == False:
-        print("Game Over")
-        break
-    print("Ganaste")      
-      
+
+# for i in range(3):
+#         x = random.randint(0,(WIDHT-1))
+#         y =random.randint(0,(HEIGH-1))
+#         print(f"[{x},{y}]")
+#         if Celda(matriz_game[x][y]).click() == False:
+#             game_over()
+#             break
         
+
+
+
+
 
