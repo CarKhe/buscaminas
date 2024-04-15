@@ -79,6 +79,32 @@ view_matriz = game_matriz(True)
 only_bombs_matriz = game_matriz()
 matriz_game = check_matriz(only_bombs_matriz)
 
+def flood_fill(y,x):
+    if x==-1 or y==-1 or (y>=HEIGH) or (x>=WIDHT) or (x>=HEIGH) or (y>=WIDHT):
+        return
+    celda_vista = Celda(view_matriz[y][x]).get_val()
+    celda_juego = Celda(matriz_game[y][x]).get_val()
+    if celda_vista == "?" and (celda_juego != 9 and celda_juego !=0):
+        view_matriz[y][x] = f"{matriz_game[y][x]}"
+    if celda_vista == "?" and celda_juego == 0 :
+        view_matriz[y][x] = f"{matriz_game[y][x]}"
+        flood_fill(y-1,x)
+        flood_fill(y-1,x+1)
+        flood_fill(y,x+1)
+        flood_fill(y+1,x+1)
+        flood_fill(y+1,x)
+        flood_fill(y+1,x-1)
+        flood_fill(y,x-1)
+        flood_fill(y-1,x-1)
+        
+
+        # flood_fill(y-1,x)
+        # flood_fill(y,x+1)
+        # flood_fill(y+1,x)
+        # flood_fill(y,x-1)
+    
+        
+
 while True:
     for i in range(HEIGH):
         print(view_matriz[i])
