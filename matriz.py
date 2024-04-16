@@ -1,9 +1,8 @@
 import random
 from celda import Celda
-HEIGH = 3
-WIDHT = 3 
-MINES = 3
-
+HEIGH = 10
+WIDHT = 10 
+MINES = 8
 
 def mines_position():
     mines_place = []
@@ -26,7 +25,7 @@ def game_matriz(view = False):
     if view:
         for x in range(WIDHT):
             for y in range(HEIGH):
-                matriz[x][y] = "?"   
+                matriz[x][y] = "??"   
     else:
         mines_place = mines_position()
         for val in mines_place:
@@ -75,6 +74,9 @@ def game_over():
     print("Se terminó el juego")
 
 
+    
+
+
 view_matriz = game_matriz(True)       
 only_bombs_matriz = game_matriz()
 matriz_game = check_matriz(only_bombs_matriz)
@@ -84,10 +86,10 @@ def flood_fill(y,x):
         return
     celda_vista = Celda(view_matriz[y][x]).get_val()
     celda_juego = Celda(matriz_game[y][x]).get_val()
-    if celda_vista == "?" and (celda_juego != 9 and celda_juego !=0):
-        view_matriz[y][x] = f"{matriz_game[y][x]}"
-    if celda_vista == "?" and celda_juego == 0 :
-        view_matriz[y][x] = f"{matriz_game[y][x]}"
+    if celda_vista == "??" and (celda_juego != 9 and celda_juego !=0):
+        view_matriz[y][x] = f"{matriz_game[y][x]} "
+    if celda_vista == "??" and celda_juego == 0 :
+        view_matriz[y][x] = f"{matriz_game[y][x]} "
         flood_fill(y-1,x)
         flood_fill(y-1,x+1)
         flood_fill(y,x+1)
@@ -105,16 +107,42 @@ def flood_fill(y,x):
     
         
 
+
+# for i in range(HEIGH):
+#     print(matriz_game[i])
+
 while True:
+    coordenanda = []
+    for w in range(WIDHT):
+        if len(str(w))==1:
+            coordenanda.append(f"0{w}")
+        else:
+            coordenanda.append(f"{w}")
+    print(f"[X] {coordenanda}")
     for i in range(HEIGH):
-        print(view_matriz[i])
-    x = input("Selecciona el Valor de X: ")
-    y = input("Selecciona el valor de Y: ")
-    if Celda(matriz_game[int(x)][int(y)]).click():
-        view_matriz[int(x)][int(y)] = f"{matriz_game[int(x)][int(y)]}"
+        if len(str(i))==1:
+            print(f"0{i}  {view_matriz[i]}")
+        else:
+            print(f"{i}  {view_matriz[i]}")
+    x = int(input("Selecciona el Valor Horizontal: "))
+    y = int(input("Selecciona el valor Vertical: "))
+    print("Menú: ")
+    print("1-Plantar Mina:")
+    print("2-Click:")
+    res = int(input("Selecciona un valor: "))
+    if res == 2:
+        if Celda(matriz_game[y][x]).click():
+            if matriz_game[y][x] == 0:
+                flood_fill(y,x)
+            else:
+                view_matriz[y][x] = f"{matriz_game[y][x]} "
+        else:
+            game_over()
+            break
+    if res == 1:
+        view_matriz[y][x] = "XX"
     else:
-        game_over()
-        break
+        pass
 
 # for x in range(HEIGH):
 #     for y in range(WIDHT):
