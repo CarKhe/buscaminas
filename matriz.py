@@ -1,8 +1,8 @@
 import random
 from celda import Celda
-HEIGH = 10
-WIDHT = 10 
-MINES = 8
+HEIGH = 3     
+WIDHT = 3
+MINES = 1
 
 def mines_position():
     mines_place = []
@@ -25,14 +25,16 @@ def game_matriz(view = False):
     if view:
         for x in range(WIDHT):
             for y in range(HEIGH):
-                matriz[x][y] = "??"   
+                matriz[x][y] = "??" 
+        return matriz  
     else:
         mines_place = mines_position()
         for val in mines_place:
             x = val[0]
             y = val[1]
             matriz[x][y] = 9
-    return matriz
+        return matriz,mines_place
+    
 
 def around(x,y):
     around = []
@@ -73,14 +75,6 @@ def check_matriz(matriz):
 def game_over():
     print("Se terminó el juego")
 
-
-    
-
-
-view_matriz = game_matriz(True)       
-only_bombs_matriz = game_matriz()
-matriz_game = check_matriz(only_bombs_matriz)
-
 def flood_fill(y,x):
     if x==-1 or y==-1 or (y>=HEIGH) or (x>=WIDHT) or (x>=HEIGH) or (y>=WIDHT):
         return
@@ -98,20 +92,45 @@ def flood_fill(y,x):
         flood_fill(y+1,x-1)
         flood_fill(y,x-1)
         flood_fill(y-1,x-1)
-        
 
-        # flood_fill(y-1,x)
-        # flood_fill(y,x+1)
-        # flood_fill(y+1,x)
-        # flood_fill(y,x-1)
+def check_mines_in_game(matriz):
+    count_in_game = 0
+    for x in range(WIDHT):
+        for y in range(HEIGH):
+            if matriz[x][y] == "XX":
+                count_in_game +=1
+    return count_in_game
+
+def check_all_cleared_mines(mines_place,view_matriz,matriz_game):
+    for i in mines_place:
+        if (view_matriz[i[0]][i[1]] == "XX") and (matriz_game[i[0]][i[1]] == 9):
+            continue
+        else:
+            return False
+    return True
+
+           
+
     
-        
 
 
-# for i in range(HEIGH):
-#     print(matriz_game[i])
+view_matriz = game_matriz(True)       
+only_bombs_matriz,mines_place = game_matriz()
+matriz_game = check_matriz(only_bombs_matriz)
 
 while True:
+    print("------------------Game----------------------")
+    mined = check_mines_in_game(view_matriz)
+    
+    if mined == MINES:
+        if check_all_cleared_mines(mines_place,view_matriz,matriz_game):
+            print("Felicidades Ganaste!!!!")
+            for i in range(HEIGH):
+                print(matriz_game[i])
+            break
+    
+    
+    print(f"Minas Puestas: {mined} --- Minas Restantes: {MINES-mined}")
     coordenanda = []
     for w in range(WIDHT):
         if len(str(w))==1:
@@ -124,13 +143,30 @@ while True:
             print(f"0{i}  {view_matriz[i]}")
         else:
             print(f"{i}  {view_matriz[i]}")
-    x = int(input("Selecciona el Valor Horizontal: "))
-    y = int(input("Selecciona el valor Vertical: "))
+    try:
+        x = int(input("Selecciona el Valor Horizontal: "))
+        y = int(input("Selecciona el valor Vertical: "))
+    except:
+        continue
+    if x>=WIDHT:
+        continue
+    if y>=HEIGH:
+        continue
+
     print("Menú: ")
     print("1-Plantar Mina:")
     print("2-Click:")
-    res = int(input("Selecciona un valor: "))
-    if res == 2:
+    print("3-Salir:")
+    try:
+        res = int(input("Selecciona un valor: "))
+    except:
+        continue
+    if res == 1:
+        if view_matriz[y][x] == "XX":
+            view_matriz[y][x] = "??"
+        else:
+            view_matriz[y][x] = "XX"
+    elif res == 2:
         if Celda(matriz_game[y][x]).click():
             if matriz_game[y][x] == 0:
                 flood_fill(y,x)
@@ -139,28 +175,10 @@ while True:
         else:
             game_over()
             break
-    if res == 1:
-        view_matriz[y][x] = "XX"
+    
+    elif res == 3:
+        print("Saliendo del Juego:")
+        break
+    
     else:
-        pass
-
-# for x in range(HEIGH):
-#     for y in range(WIDHT):
-#         Celda(matriz_game[x][y]).click()
-
-
-
-
-# for i in range(3):
-#         x = random.randint(0,(WIDHT-1))
-#         y =random.randint(0,(HEIGH-1))
-#         print(f"[{x},{y}]")
-#         if Celda(matriz_game[x][y]).click() == False:
-#             game_over()
-#             break
-        
-
-
-
-
-
+        continue
