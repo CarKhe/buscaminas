@@ -2,7 +2,8 @@ import random
 from celda import Celda
 HEIGH = 3     
 WIDHT = 3
-MINES = 1
+MINES = 3
+
 
 def mines_position():
     mines_place = []
@@ -182,3 +183,10 @@ while True:
     
     else:
         continue
+
+        
+
+
+
+
+
