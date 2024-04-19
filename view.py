@@ -1,5 +1,6 @@
 import tkinter as tk
-from celda import Celda
+from celda_new import Celda
+import time
 
 MINES = 3
 class Game:
@@ -29,26 +30,16 @@ class Game:
         self.board = tk.Frame(self.root,bg="#AFA8A8")
         self.board.place(x=10,y=70,height=300,width=250)
 
-        Celda(self.root,10,70,6)
-        Celda(self.root,10,120,2)
-        Celda(self.root,10,170,0)
-        Celda(self.root,10,220,9)
-        Celda(self.root,10,270,0)
-        Celda(self.root,10,320,9)
-        Celda(self.root,60,70,9)
-        Celda(self.root,60,120,1)
-        Celda(self.root,60,170,0)
-        Celda(self.root,60,220,3)
-        Celda(self.root,60,270,0)
-        Celda(self.root,60,320,9)
-
-        
-        
+        value = [[0,6,5,4,5,6,7,4],[0,6,5,4,5,6,7,4],[0,6,5,4,5,6,7,4],[0,6,5,4,5,6,7,4],[0,6,5,4,5,6,7,4]]
+        x_pos = 10
+        y_pos = 70 
+        start_time = time.time()
+        for x in range(5):
+            for y in range(6):
+                Celda(self.root,(x_pos+(50*x)),(y_pos+(50*y)),value[x][y])    
+        print("--- %s seconds ---" % (time.time() - start_time)) 
 
         self.root.mainloop()
-
-    
-        
 
 
 Game()
